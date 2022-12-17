@@ -25,6 +25,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mapbox/rehype-prism": "^0.8.0",
+    "@material-ui/core": "^4.12.4",
     "@tailwindcss/typography": "^0.5.8",
     "axios": "^1.2.1",
     "classnames": "^2.3.2",
@@ -35,8 +36,8 @@
     "next-remote-watch": "2.0.0",
     "npm-check-updates": "^16.6.0",
     "prismjs": "^1.29.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
