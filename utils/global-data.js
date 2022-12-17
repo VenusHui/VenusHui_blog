@@ -1,5 +1,5 @@
 export const getGlobalData = () => {
-  const name = 'VenusHui';
+  const name = '';
   const blogTitle = 'VenusHui\'s Blog';
   const footerText = '心有所向，日复一日，必有精进';
 

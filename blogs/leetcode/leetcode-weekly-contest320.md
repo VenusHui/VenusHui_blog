@@ -1,0 +1,287 @@
+---
+title: Leetcode第320场周赛1-3题题解
+description: "比赛时间：2022/11/20 10:30-12:00，排名：1776/5678"
+date: 2022/11/10
+---
+
+> 这次是真·好久不见，从今天开始VenusHui's Blog的题解栏目要坚持更新啦！
+
+![](https://fc.dianhsu.top/lc?user=VenusHui&loc=cn&req=rating)
+
+# [Leetcode第320场周赛](https://leetcode.cn/contest/weekly-contest-320/)
+
+### [第一题 数组中不等三元组的数目](https://leetcode.cn/problems/number-of-unequal-triplets-in-array/)
+
+#### 题目描述
+
+给你一个下标从 0 开始的正整数数组 `nums` 。请你找出并统计满足下述条件的三元组` (i, j, k)` 的数目：
+
+- `0 <= i < j < k < nums.length`
+- `nums[i]`、`nums[j]` 和 ` nums[k]` **两两不同** 。
+  换句话说：`nums[i] != nums[j]`、`nums[i] != nums[k]` 且 `nums[j] != nums[k]` 。
+  返回满足上述条件三元组的数目。
+
+#### 样例：
+
+```
+输入：nums = [4,4,2,4,3]
+输出：3
+解释：下面列出的三元组均满足题目条件：
+- (0, 2, 4) 因为 4 != 2 != 3
+- (1, 2, 4) 因为 4 != 2 != 3
+- (2, 3, 4) 因为 2 != 4 != 3
+共计 3 个三元组，返回 3 。
+注意 (2, 0, 4) 不是有效的三元组，因为 2 > 0 。
+```
+
+#### 数据范围：
+
+```
+3 <= nums.length <= 100
+1 <= nums[i] <= 1000
+```
+
+#### 题目分析：
+
+根据数据范围，我们显然可以暴力用 `O(n^3)` 的复杂度进行遍历找出每个符合题目条件的三元组并统计数目
+
+#### 复杂度分析：
+
+- 时间复杂度  `O(n^3)`
+- 空间复杂度  `O(1)`
+
+#### AC代码
+
+```cpp
+class Solution {
+public:
+    int unequalTriplets(vector<int>& nums) {
+        int size = nums.size(), ans = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = i; j < size; j++) {
+                if (nums[i] != nums[j]) {
+                    for (int k = j; k < size; k++) {
+                        if (nums[k] != nums[i] && nums[k] != nums[j]) {
+                            ans++;
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+### [第二题 二叉搜索树最近节点查询](https://leetcode.cn/problems/closest-nodes-queries-in-a-binary-search-tree/)
+
+#### 题目描述
+
+给你一个 `二叉搜索树` 的根节点 `root` ，和一个由正整数组成、长度为 `n` 的数组 `queries` 。
+
+请你找出一个长度为 `n` 的 **二维** 答案数组 `answer` ，其中 `answer[i] = [mini, maxi]` ：
+
+- `mini` 是树中小于等于 `queries[i]` 的 **最大值** 。如果不存在这样的值，则使用 `-1` 代替。
+- `maxi` 是树中大于等于 `queries[i]` 的 **最小值** 。如果不存在这样的值，则使用 `-1` 代替。
+
+返回数组 `answer` 。
+
+#### 样例
+
+```
+输入：root = [6,2,13,1,4,9,15,null,null,null,null,null,null,14], queries = [2,5,16]
+输出：[[2,2],[4,6],[15,-1]]
+解释：按下面的描述找出并返回查询的答案：
+- 树中小于等于 2 的最大值是 2 ，且大于等于 2 的最小值也是 2 。所以第一个查询的答案是 [2,2] 。
+- 树中小于等于 5 的最大值是 4 ，且大于等于 5 的最小值是 6 。所以第二个查询的答案是 [4,6] 。
+- 树中小于等于 16 的最大值是 15 ，且大于等于 16 的最小值不存在。所以第三个查询的答案是 [15,-1] 。
+```
+
+#### 数据范围
+
+```
+树中节点的数目在范围 [2, 1e5] 内
+1 <= Node.val <= 1e6
+n == queries.length
+1 <= n <= 1e5
+1 <= queries[i] <= 1e6
+```
+
+#### 题目分析
+
+由于题给的是二叉搜索树，所以我们可以直接通过以下两步解决问题：
+
+- 中序遍历的方式获取包含所有节点值的有序数组（虽然赛时我是先序遍历再排序，，真蠢！）
+- 二分在该有序数组中查找每一个询问的答案
+
+需要注意的是：对于每一个询问，不能直接在二叉搜索树中进行搜索，因为这棵树不一定是平衡的，很可能出现单支树的极端情况导致TLE。
+
+#### AC代码
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    vector<int> res;
+    inline void calc(TreeNode* node) {
+        if (node == nullptr) {
+            return;
+        }
+        res.push_back(node->val);
+        calc(node->left);
+        calc(node->right);
+    }
+public:
+    vector<vector<int>> closestNodes(TreeNode* root, vector<int>& queries) {
+        int n = queries.size();
+        vector<vector<int>> ans(n, vector<int>(2));
+        calc(root);
+        sort(res.begin(), res.end());
+        int size = res.size();
+        for (int i = 0; i < n; i++) {
+            if (queries[i] < res[0]) {
+                ans[i][0] = -1;
+            }
+            else {
+                int l = 0, r = size - 1;
+                while (l < r) {
+                    int m = (l + r + 1) >> 1;
+                    if (res[m] <= queries[i]) {
+                        l = m;
+                    }
+                    else {
+                        r = m - 1;
+                    }
+                }
+                ans[i][0] = res[l];
+            }
+            if (queries[i] > res[size - 1]) {
+                ans[i][1] = -1;
+            }
+            else {
+                int l = 0, r = size - 1;
+                while (l < r) {
+                    int m = (l + r) >> 1;
+                    if (res[m] < queries[i]) {
+                        l = m + 1;
+                    }
+                    else {
+                        r = m;
+                    }
+                }
+                ans[i][1] = res[l];
+            }    
+        }
+        return ans;
+    }
+};
+```
+
+### [第三题 到达首都的最少油耗](https://leetcode.cn/problems/minimum-fuel-cost-to-report-to-the-capital/)
+
+#### 题目描述
+
+给你一棵 `n` 个节点的树（一个无向、连通、无环图），每个节点表示一个城市，编号从 `0` 到 `n - 1` ，且恰好有 `n - 1` 条路。`0` 是首都。给你一个二维整数数组 `roads` ，其中 `roads[i] = [ai, bi]` ，表示城市 `ai` 和 `bi` 之间有一条 双向路 。
+
+每个城市里有一个代表，他们都要去首都参加一个会议。
+
+每座城市里有一辆车。给你一个整数 `seats` 表示每辆车里面座位的数目。
+
+城市里的代表可以选择乘坐所在城市的车，或者乘坐其他城市的车。相邻城市之间一辆车的油耗是一升汽油。
+
+请你返回到达首都最少需要多少升汽油。
+
+#### 样例
+
+```
+输入：roads = [[0,1],[0,2],[0,3]], seats = 5
+输出：3
+解释：
+- 代表 1 直接到达首都，消耗 1 升汽油。
+- 代表 2 直接到达首都，消耗 1 升汽油。
+- 代表 3 直接到达首都，消耗 1 升汽油。
+最少消耗 3 升汽油。
+
+输入：roads = [[3,1],[3,2],[1,0],[0,4],[0,5],[4,6]], seats = 2
+输出：7
+解释：
+- 代表 2 到达城市 3 ，消耗 1 升汽油。
+- 代表 2 和代表 3 一起到达城市 1 ，消耗 1 升汽油。
+- 代表 2 和代表 3 一起到达首都，消耗 1 升汽油。
+- 代表 1 直接到达首都，消耗 1 升汽油。
+- 代表 5 直接到达首都，消耗 1 升汽油。
+- 代表 6 到达城市 4 ，消耗 1 升汽油。
+- 代表 4 和代表 6 一起到达首都，消耗 1 升汽油。
+最少消耗 7 升汽油。
+```
+
+#### 数据范围
+
+```
+1 <= n <= 1e5
+roads.length == n - 1
+roads[i].length == 2
+0 <= ai, bi < n
+ai != bi
+roads 表示一棵合法的树。
+1 <= seats <= 1e5
+```
+
+#### 题目分析
+
+- 为使消耗的汽油最少，我们应该从树的叶子节点出发开始处理，因为只有叶子节点才一定不会被其他节点搭到顺风车。
+
+  明确贪心的条件之后，我们可以使用 **dfs** 的方式进行搜索，**dfs** 可以确保每次处理都是从未被处理过的叶子节点开始的。
+
+- 再计算油耗时，对于每一个节点来说，将该节点的所有人运送到下一节点的油耗只与该节点的人流量有关，所以在 **dfs** 的时候我们还需要记录当前处理的节点会给下一个到达节点带去多少人流量，也就是说 **dfs** 函数需要返回的是该节点的人流量，同时油耗可以通过该节点的人流量动态得出，这个动态得出的过程也被称作 **树上dp**。
+
+#### AC代码
+
+```cpp
+class Solution {
+typedef long long ll;
+public:
+    ll minimumFuelCost(vector<vector<int>>& roads, int seats) {
+        int n = roads.size();
+        vector<vector<int>> mp(n + 1);
+        for (int i = 0; i < n; i++) {
+            mp[roads[i][0]].push_back(roads[i][1]);
+            mp[roads[i][1]].push_back(roads[i][0]);
+        }
+        vector<bool> vis(n + 1, false);
+        vector<int> visn(n + 1, 1);
+        ll ans = 0;
+        function<ll(int)> dfs = [&] (int cnt) {
+            if (vis[cnt]) {
+                return 0;
+            }
+            vis[cnt] = true;
+            for (auto& i : mp[cnt]) {
+                visn[cnt] += dfs(i);
+            }
+            if (cnt) {
+                if (visn[cnt] % seats == 0) {
+                    ans += visn[cnt] / seats;
+                }
+                else {
+                    ans += visn[cnt] / seats + 1;
+                }
+            }
+            return visn[cnt];
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
