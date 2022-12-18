@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: 'https://api.github.com',
 });
 
-function SearchBar({ posts }) {
+function SearchBar({ posts, setArticles }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
@@ -18,15 +18,22 @@ function SearchBar({ posts }) {
         q: query + "+repo:VenusHui/VenusHui_blog/posts/"
       },
     });
-    const posts = []
+    const files = []
     const regex = /^posts\/.+$/;
     response.data.items.map((post) => {
       if (regex.test(post.path)) {
-        posts.push(post.path.substring(6))
+        files.push(post.path.substring(6))
       }
     })
-    setResults(posts);
-    console.log(results)
+    setResults(files);
+    const articles = []
+    posts.map((post) => {
+      if (results.includes(post.filePath)) {
+        console.log(post.filePath)
+        articles.push(post);
+      }
+    });
+    setArticles(articles);
   };
 
   return (

@@ -4,10 +4,8 @@ import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrism from '@mapbox/rehype-prism';
 
-// POSTS_PATH is useful when you want to get the path to a specific file
 export const POSTS_PATH = path.join(process.cwd(), 'posts');
 
-// postFilePaths is the list of all mdx files inside the POSTS_PATH directory
 export const postFilePaths = fs
   .readdirSync(POSTS_PATH)
   // Only include md(x) files
@@ -21,8 +19,8 @@ export const sortPostsByDate = (posts) => {
   });
 };
 
-export const getPosts = () => {
-  let posts = postFilePaths.map((filePath) => {
+export const getPosts = (posts) => {
+  posts = postFilePaths.map((filePath) => {
     const source = fs.readFileSync(path.join(POSTS_PATH, filePath));
     const { content, data } = matter(source);
 
@@ -81,7 +79,6 @@ export const getPreviousPostBySlug = (slug) => {
   const currentPostIndex = posts.indexOf(currentPost);
 
   const post = posts[currentPostIndex + 1];
-  // no prev post found
   if (!post) return null;
 
   const previousPostSlug = post?.filePath.replace(/\.mdx?$/, '');

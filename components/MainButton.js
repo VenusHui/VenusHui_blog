@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core';
-import { useRouter } from 'next/router';
+import {Button} from '@material-ui/core';
+import {useRouter} from 'next/router';
 
 export default function MainButton() {
   const router = useRouter();

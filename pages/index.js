@@ -10,16 +10,21 @@ import SEO from '../components/SEO';
 import { useState } from 'react';
 
 export default function Index({ posts, globalData }) {
+  const [articles, setArticles] = useState(posts);
+  // useEffect(() => {
+  //   setArticles(posts);
+  // }, [posts]);
+
   return (
     <Layout>
       <SEO title={globalData.name} description={globalData.blogTitle} />
-      <Header name={globalData.name} posts={posts} />
+      <Header name={globalData.name} posts={posts} setArticles={setArticles} />
       <main className="w-full">
         <h1 className="text-3xl lg:text-5xl text-center mb-12">
           {globalData.blogTitle}
         </h1>
         <ul className="w-full">
-          {posts.map((post) => (
+          {articles.map((post) => (
             <li
               key={post.filePath}
               className="md:first:rounded-t-lg md:last:rounded-b-lg backdrop-blur-lg bg-white dark:bg-black dark:bg-opacity-30 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-50 transition border border-gray-800 dark:border-white border-opacity-10 dark:border-opacity-10 border-b-0 last:border-b hover:border-b hovered-sibling:border-t-0"
@@ -61,7 +66,7 @@ export default function Index({ posts, globalData }) {
 }
 
 export function getStaticProps() {
-  const posts = getPosts();
+  const posts = getPosts([]);
   const globalData = getGlobalData();
 
   return { props: { posts, globalData } };
