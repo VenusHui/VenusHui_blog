@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: 'https://api.github.com',
 });
 
-function SearchBar() {
+function SearchBar({ posts }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
@@ -18,13 +18,19 @@ function SearchBar() {
         q: query + "+repo:VenusHui/VenusHui_blog/posts/"
       },
     });
-    setResults(response.data.items);
-    console.log(query);
-    console.log(results);
+    const posts = []
+    const regex = /^posts\/.+$/;
+    response.data.items.map((post) => {
+      if (regex.test(post.path)) {
+        posts.push(post.path.substring(6))
+      }
+    })
+    setResults(posts);
+    console.log(results)
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{display: 'flex', justifyContent: 'space-between'}}>
+    <form onSubmit={handleSubmit} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <TextField
         label="Search"
         variant="outlined"
