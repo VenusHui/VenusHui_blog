@@ -11,9 +11,6 @@ import { useState } from 'react';
 
 export default function Index({ posts, globalData }) {
   const [articles, setArticles] = useState(posts);
-  // useEffect(() => {
-  //   setArticles(posts);
-  // }, [posts]);
 
   return (
     <Layout>

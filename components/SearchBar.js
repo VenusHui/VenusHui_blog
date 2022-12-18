@@ -39,7 +39,7 @@ function SearchBar({ posts, setArticles }) {
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <TextField
-        label="Search"
+        label="搜索"
         variant="outlined"
         size="medium"
         fullWidth

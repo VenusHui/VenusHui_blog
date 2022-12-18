@@ -52,7 +52,7 @@ export default function PostPage({
           )}
         </header>
         <main>
-          <article className="prose dark:prose-dark" style={{maxWidth: "90ch"}}>
+          <article className="prose dark:prose-dark" style={{maxWidth: "60rem"}}>
             <MDXRemote {...source} components={components} />
           </article>
         </main>
