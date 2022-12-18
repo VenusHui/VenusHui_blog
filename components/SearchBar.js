@@ -28,7 +28,7 @@ function SearchBar() {
       <TextField
         label="Search"
         variant="outlined"
-        size="small"
+        size="medium"
         fullWidth
         value={query}
         onChange={(event) => setQuery(event.target
