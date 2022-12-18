@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getGlobalData } from '../utils/global-data';
 
 export default function Header({ name }) {
   return (

@@ -1,57 +1,44 @@
-import {useState, useEffect} from "react";
-import {Input} from '@chakra-ui/react';
+import { TextField, IconButton } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import axios from 'axios';
+import { useState } from 'react';
 
-import './SearchBar.module.css';
+const instance = axios.create({
+  baseURL: 'https://api.github.com',
+});
 
 function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
-  // useEffect(() => {
-  //   const style = document.createElement('style');
-  //   style.innerHTML = `
-  //     body {
-  //       color: red;
-  //     }
-  //   `;
-  //   document.head.appendChild(style);
-  // }, []);
-
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    axios.get(`https://api.github.com/search/code?q=${searchTerm}+repo:VenusHui/VenusHui_blog/posts/`)
-      .then((response) => {
-        console.log(response)
-        setResults(response.data.results);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const response = await instance.get('/search/code', {
+      params: {
+        q: query + "+repo:VenusHui/VenusHui_blog/posts/"
+      },
+    });
+    setResults(response.data.items);
+    console.log(query);
+    console.log(results);
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Input
-          className="search-bar"
-          type="text"
-          placeholder='搜索文本' // 预显示文本
-          value={searchTerm}
-          onChange={handleChange}
-        />
-        <button type="submit">Search</button>
-      </form>
-      {/*{results.map((result) => (*/}
-      {/*  <p key={result.id}>{result.title}</p>*/}
-      {/*))}*/}
-    </div>
+    <form onSubmit={handleSubmit} style={{display: 'flex', justifyContent: 'space-between'}}>
+      <TextField
+        label="Search"
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={query}
+        onChange={(event) => setQuery(event.target
+          .value)}
+      />
+      <IconButton type="submit">
+        <SearchIcon />
+      </IconButton>
+    </form>
   );
 }
 
-export default SearchBar;
+export default SearchBar

@@ -6,4 +6,13 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or 'class'
   presets: [require('./utils/tailwind-preset')],
+  theme: {
+    extend: {
+      maxWidth: {
+        '2xl': '60rem',
+      },
+    },
+  },
+  variants: {},
+  plugins: [],
 };
