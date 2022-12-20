@@ -21,3 +21,12 @@ jobs:
           yarn lint
         env: 
           CI: true
+  
+  deploy: 
+    name: Deployment
+    runs-on: ubuntu-latest
+    needs: [lintTest]
+    steps:
+      - name: Install Dependencies
+        run: |
+          echo "Deployment in Progress..."
