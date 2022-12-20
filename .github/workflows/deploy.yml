@@ -14,10 +14,10 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Running Installing Dependencies..."
-          npm install
+          yarn install
       - name: Run Linting
         run: |
           echo "Run Linting Test..."
-          npm run lint
+          yarn lint
         env: 
           CI: true
