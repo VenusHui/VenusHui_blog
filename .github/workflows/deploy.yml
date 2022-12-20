@@ -46,4 +46,4 @@ jobs:
           host: ${{ secrets.TENCENT_CLOUD_IP }}
           username: ${{ secrets.TENCENT_CLOUD_USERNAME }}
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-          script: cd ~/Blog && bash deploy.sh ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+          script: cd ~/Blog && bash deploy.sh ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }} >> ./deploy.log
