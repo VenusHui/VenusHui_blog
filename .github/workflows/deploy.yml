@@ -5,34 +5,20 @@ on:
     branches: [main]
 
 jobs:
-  lintTest: 
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: |
-          echo "Running Installing Dependencies..."
-          yarn install
-      - name: Run Linting
-        run: |
-          echo "Run Linting Test..."
-          yarn lint
-        env: 
-          CI: true
-  
   deploy: 
     name: Deployment
     runs-on: ubuntu-latest
-    needs: [lintTest]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
       - name: Install Dependencies
         run: |
           echo "Building..."
-          ls -l
           yarn install
-          yarn run export
+          yarn export
 
       - name: Login Docker
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
