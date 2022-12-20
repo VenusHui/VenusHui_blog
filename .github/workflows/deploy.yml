@@ -30,6 +30,7 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Building..."
+          ls -l
           yarn install
           yarn run export
 
