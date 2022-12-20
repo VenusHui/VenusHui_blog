@@ -17,6 +17,7 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Building..."
+          echo ${{ secrets.DOCKER_USERNAME }}
           yarn install
           yarn export
 
