@@ -1,3 +1,9 @@
+---
+title: 【Daily】11.18 Daily Coding
+description: "Leetcode 891 子序列宽度之和 && React状态传递"
+date: 2022/11/18
+---
+
 # 【Coding日记】2022.11.18
 
 ## Leetcode
@@ -40,18 +46,16 @@
 - 其他情况：若 `nums[i]` 既不为序列中最大元素又不为最小元素时，它对最终结果并没有贡献，我们并不关心这种情况
 
 对于前两种可能性，`nums[i]` 每成为一次最大元素，对最终结果的贡献为 `+ nums[i]`，关注 `nums[i]` 之前的 `i` 个元素，每个元素都有取和不取两种状态，所以最终 `nums[i]` 作为最大元素的贡献为：
-$$
-+ (2^i - 1) \times nums[i]
-$$
-同理作为最小元素的贡献为：
-$$
-- (2^{n - i - 1} - 1) \times nums[i]
-$$
-最终结果为：
-$$
-\Sigma_{i = 0}^{n - 1}(2^i - 1) \times nums[i] - (2^{n - i - 1} - 1) \times nums[i]
-$$
 
+`+ (2^i - 1) \times nums[i]`
+
+同理作为最小元素的贡献为：
+
+`- (2^{n - i - 1} - 1) \times nums[i]`
+
+最终结果为：
+
+`\Sigma_{i = 0}^{n - 1}(2^i - 1) \times nums[i] - (2^{n - i - 1} - 1) \times nums[i]`
 
 #### 复杂度分析
 
