@@ -17,6 +17,10 @@ function SearchBar({ posts, setArticles }) {
       params: {
         q: query + "+repo:VenusHui/VenusHui_blog/posts/"
       },
+      auth: {
+        username: process.env.GITHUB_USERNAME,
+        password: process.env.GITHUB_PASSWORD,
+      },
     });
     const files = []
     const regex = /^posts\/.+$/;
