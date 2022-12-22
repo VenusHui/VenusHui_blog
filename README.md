@@ -26,7 +26,25 @@
 
 ### 功能实现
 
+#### 博文搜索
 
+由于本项目所有博文均采用 GitHub 仓库对所有博文进行管理，所以可以通过 axios 请求 GitHub 提供的 API 在本仓库内根据关键词进行搜索。
+
+```javascript
+const response = await instance.get('/search/code', {
+  params: {
+    q: query + "+repo:VenusHui/VenusHui_blog/posts/"
+      },
+  auth: {
+    username: process.env.GITHUB_USERNAME,
+    password: process.env.GITHUB_PASSWORD,
+  },
+});
+```
+
+#### 博文渲染
+
+由于本项目所有博文均通过 `markdown` 进行编写，所以选择 `next-mdx-remote` 将 `markdown` 文件转换为 `mdx` 文件之后进行渲染，并提取该文件的 `title` 、`description` 、`date` 信息进行博文简略信息的卡片渲染。
 
 ### 部署流程
 
@@ -36,43 +54,16 @@
 
 ```yaml
 - name: Checkout
-  uses: actions/checkout@v2
-  with:
-    persist-credentials: false
 
 - name: Install Dependencies
-  run: |
-    echo "Building..."
-    yarn install
-    yarn export
 
 - name: Login Docker
-  uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-    with: 
-      username: ${{ secrets.DOCKER_USERNAME }}
-      password: ${{ secrets.DOCKER_PASSWORD }}
 
 - name: Extract metadata for Docker
-  id: meta
-  uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-  with:
-    images: VenusHui/VenusHui_blog
 
 - name: Publish Docker Image
-  uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-  with: 
-    context: .
-     push: true
-     tags: ${{ steps.meta.outputs.tags }}
-     labels: ${{ steps.meta.outputs.labels }}
 
 - name: Deploy On Tencent Cloud Server
-  uses: appleboy/ssh-action@master
-  with: 
-  	host: ${{ secrets.TENCENT_CLOUD_IP }}
-    username: ${{ secrets.TENCENT_CLOUD_USERNAME }}
-    password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-    script: cd ~/Blog && bash deploy.sh ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }} >> ./deploy.log
 ```
 
 #### Docker
